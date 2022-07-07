@@ -31,7 +31,7 @@ impl Display for ChunkType {
 
 impl ChunkType {
     fn bytes(&self) -> [u8; 4] {
-        todo!()
+        self.0
     }
     fn is_valid(&self) -> bool {
         todo!()

@@ -1,13 +1,17 @@
 use std::{fmt::Display, str::FromStr};
 
 #[derive(PartialEq, Eq)]
-struct ChunkType {}
+struct ChunkType([u8; 4]);
 
 impl TryFrom<[u8; 4]> for ChunkType {
     type Error = String;
 
     fn try_from(value: [u8; 4]) -> Result<Self, Self::Error> {
-        todo!()
+        if value.iter().any(|v| !v.is_ascii_alphabetic()) {
+            return Err(String::from("Invalid type"));
+        }
+
+        return Ok(ChunkType(value));
     }
 }
 

@@ -1,6 +1,6 @@
 use std::{fmt::Display, str::FromStr};
 
-#[derive(PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq)]
 struct ChunkType([u8; 4]);
 
 impl TryFrom<[u8; 4]> for ChunkType {

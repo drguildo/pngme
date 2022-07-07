@@ -1,3 +1,51 @@
+use std::{fmt::Display, str::FromStr};
+
+#[derive(PartialEq, Eq)]
+struct ChunkType {}
+
+impl TryFrom<[u8; 4]> for ChunkType {
+    type Error = String;
+
+    fn try_from(value: [u8; 4]) -> Result<Self, Self::Error> {
+        todo!()
+    }
+}
+
+impl FromStr for ChunkType {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        todo!()
+    }
+}
+
+impl Display for ChunkType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        todo!()
+    }
+}
+
+impl ChunkType {
+    fn bytes(&self) -> [u8; 4] {
+        todo!()
+    }
+    fn is_valid(&self) -> bool {
+        todo!()
+    }
+    fn is_critical(&self) -> bool {
+        todo!()
+    }
+    fn is_public(&self) -> bool {
+        todo!()
+    }
+    fn is_reserved_bit_valid(&self) -> bool {
+        todo!()
+    }
+    fn is_safe_to_copy(&self) -> bool {
+        todo!()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

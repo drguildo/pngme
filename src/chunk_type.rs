@@ -19,7 +19,16 @@ impl FromStr for ChunkType {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        todo!()
+        if s.len() != 4 {
+            return Err(String::from("Invalid length"))
+        }
+
+        let bytes = s.as_bytes();
+        let mut chunk_type: [u8; 4] = [0; 4];
+        for i in 0..4 {
+            chunk_type[i] = bytes[i];
+        }
+        ChunkType::try_from(chunk_type)
     }
 }
 

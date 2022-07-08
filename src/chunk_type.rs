@@ -66,7 +66,7 @@ impl ChunkType {
         self.0[2].is_ascii_uppercase()
     }
     fn is_safe_to_copy(&self) -> bool {
-        todo!()
+        self.0[3].is_ascii_lowercase()
     }
 }
 

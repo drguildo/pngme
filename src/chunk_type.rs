@@ -63,7 +63,7 @@ impl ChunkType {
         todo!()
     }
     fn is_reserved_bit_valid(&self) -> bool {
-        todo!()
+        self.0[2].is_ascii_uppercase()
     }
     fn is_safe_to_copy(&self) -> bool {
         todo!()

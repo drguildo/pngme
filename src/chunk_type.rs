@@ -60,7 +60,7 @@ impl ChunkType {
         self.0[0].is_ascii_uppercase()
     }
     fn is_public(&self) -> bool {
-        todo!()
+        self.0[1].is_ascii_uppercase()
     }
     fn is_reserved_bit_valid(&self) -> bool {
         self.0[2].is_ascii_uppercase()

@@ -17,12 +17,12 @@ struct ChunkType([u8; 4]);
 impl TryFrom<[u8; 4]> for ChunkType {
     type Error = Error;
 
-    fn try_from(value: [u8; 4]) -> Result<Self> {
-        if value.iter().any(|v| !v.is_ascii_alphabetic()) {
+    fn try_from(bytes: [u8; 4]) -> Result<Self> {
+        if bytes.iter().any(|b| !b.is_ascii_alphabetic()) {
             return Err(Box::new(ChunkTypeError("invalid byte array".to_string())));
         }
 
-        return Ok(ChunkType(value));
+        return Ok(ChunkType(bytes));
     }
 }
 

@@ -7,7 +7,7 @@ struct ChunkTypeError(String);
 impl std::error::Error for ChunkTypeError {}
 impl Display for ChunkTypeError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        self.0.fmt(f)
+        std::fmt::Display::fmt(&self.0, f)
     }
 }
 
@@ -45,7 +45,7 @@ impl FromStr for ChunkType {
 
 impl Display for ChunkType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        todo!()
+        std::fmt::Display::fmt(&std::str::from_utf8(&self.0).unwrap(), f)
     }
 }
 

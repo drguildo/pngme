@@ -1,14 +1,25 @@
 use std::{fmt::Display, str::FromStr};
 
+use crate::{Error, Result};
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct ChunkTypeError(String);
+impl std::error::Error for ChunkTypeError {}
+impl Display for ChunkTypeError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+
 #[derive(Debug, PartialEq, Eq)]
 struct ChunkType([u8; 4]);
 
 impl TryFrom<[u8; 4]> for ChunkType {
-    type Error = String;
+    type Error = Error;
 
-    fn try_from(value: [u8; 4]) -> Result<Self, Self::Error> {
+    fn try_from(value: [u8; 4]) -> Result<Self> {
         if value.iter().any(|v| !v.is_ascii_alphabetic()) {
-            return Err(String::from("Invalid type"));
+            return Err(Box::new(ChunkTypeError("invalid byte array".to_string())));
         }
 
         return Ok(ChunkType(value));
@@ -16,11 +27,11 @@ impl TryFrom<[u8; 4]> for ChunkType {
 }
 
 impl FromStr for ChunkType {
-    type Err = String;
+    type Err = Error;
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
+    fn from_str(s: &str) -> Result<Self> {
         if s.len() != 4 {
-            return Err(String::from("Invalid length"))
+            return Err(Box::new(ChunkTypeError("invalid string".to_string())));
         }
 
         let bytes = s.as_bytes();

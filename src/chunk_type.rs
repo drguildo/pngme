@@ -57,7 +57,7 @@ impl ChunkType {
         self.0.iter().all(|b| b.is_ascii_alphabetic()) && self.is_reserved_bit_valid()
     }
     fn is_critical(&self) -> bool {
-        todo!()
+        self.0[0].is_ascii_uppercase()
     }
     fn is_public(&self) -> bool {
         todo!()

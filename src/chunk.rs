@@ -1,3 +1,47 @@
+use std::fmt::Display;
+
+use crate::{chunk_type::ChunkType, Error, Result};
+
+pub struct Chunk {}
+
+impl TryFrom<&[u8]> for Chunk {
+    type Error = Error;
+
+    fn try_from(bytes: &[u8]) -> Result<Self> {
+        todo!()
+    }
+}
+
+impl Display for Chunk {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        todo!()
+    }
+}
+
+impl Chunk {
+    fn new(chunk_type: ChunkType, data: Vec<u8>) -> Chunk {
+        todo!()
+    }
+    fn length(&self) -> u32 {
+        todo!()
+    }
+    fn chunk_type(&self) -> &ChunkType {
+        todo!()
+    }
+    fn data(&self) -> &[u8] {
+        todo!()
+    }
+    fn crc(&self) -> u32 {
+        todo!()
+    }
+    fn data_as_string(&self) -> Result<String> {
+        todo!()
+    }
+    fn as_bytes(&self) -> Vec<u8> {
+        todo!()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

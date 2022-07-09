@@ -2,7 +2,11 @@ use std::fmt::Display;
 
 use crate::{chunk_type::ChunkType, Error, Result};
 
-pub struct Chunk {}
+pub struct Chunk {
+    chunk_type: ChunkType,
+    data: Vec<u8>,
+    crc: u32,
+}
 
 impl TryFrom<&[u8]> for Chunk {
     type Error = Error;

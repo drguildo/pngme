@@ -24,10 +24,15 @@ impl Display for Chunk {
 
 impl Chunk {
     fn new(chunk_type: ChunkType, data: Vec<u8>) -> Chunk {
-        todo!()
+        let crc = crc::Crc::<u32>::new(&crc::CRC_32_ISO_HDLC);
+        let mut digest = crc.digest();
+        digest.update(&chunk_type.bytes());
+        digest.update(&data);
+
+        Chunk { chunk_type, data, crc: digest.finalize() }
     }
     fn length(&self) -> u32 {
-        todo!()
+        self.data.len() as u32
     }
     fn chunk_type(&self) -> &ChunkType {
         todo!()
@@ -36,7 +41,7 @@ impl Chunk {
         todo!()
     }
     fn crc(&self) -> u32 {
-        todo!()
+        self.crc
     }
     fn data_as_string(&self) -> Result<String> {
         todo!()

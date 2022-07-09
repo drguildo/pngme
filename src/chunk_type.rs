@@ -12,7 +12,7 @@ impl Display for ChunkTypeError {
 }
 
 #[derive(Debug, PartialEq, Eq)]
-struct ChunkType([u8; 4]);
+pub struct ChunkType([u8; 4]);
 
 impl TryFrom<[u8; 4]> for ChunkType {
     type Error = Error;

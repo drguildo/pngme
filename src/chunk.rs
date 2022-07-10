@@ -11,7 +11,20 @@ impl TryFrom<&[u8]> for Chunk {
     type Error = Error;
 
     fn try_from(bytes: &[u8]) -> Result<Self> {
-        todo!()
+        let (data_length, bytes) = bytes.split_at(4);
+        let length = u32::from_be_bytes(data_length.try_into()?) as usize;
+
+        // TODO: Check chunk type is valid
+        let (chunk_type_bytes, bytes) = bytes.split_at(4);
+        let chunk_type_bytes: [u8; 4] = chunk_type_bytes.try_into()?;
+        let chunk_type = ChunkType::try_from(chunk_type_bytes)?;
+
+        let (data, checksum_bytes) = bytes.split_at(length);
+
+        // TODO: Check checksum is valid
+        let checksum = u32::from_be_bytes(checksum_bytes.try_into()?);
+
+        Ok(Chunk::new(chunk_type, data.to_owned()))
     }
 }
 

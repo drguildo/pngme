@@ -48,7 +48,13 @@ impl Chunk {
         todo!()
     }
     fn crc(&self) -> u32 {
-        let bytes: Vec<u8> = self.chunk_type.bytes().iter().cloned().chain(self.data.iter().cloned()).collect();
+        let bytes: Vec<u8> = self
+            .chunk_type
+            .bytes()
+            .iter()
+            .cloned()
+            .chain(self.data.iter().cloned())
+            .collect();
         let crc = crc::Crc::<u32>::new(&crc::CRC_32_ISO_HDLC);
         let checksum = crc.checksum(&bytes);
         checksum

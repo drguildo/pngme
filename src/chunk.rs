@@ -5,7 +5,6 @@ use crate::{chunk_type::ChunkType, Error, Result};
 pub struct Chunk {
     chunk_type: ChunkType,
     data: Vec<u8>,
-    crc: u32,
 }
 
 impl TryFrom<&[u8]> for Chunk {
@@ -24,12 +23,7 @@ impl Display for Chunk {
 
 impl Chunk {
     fn new(chunk_type: ChunkType, data: Vec<u8>) -> Chunk {
-        let crc = crc::Crc::<u32>::new(&crc::CRC_32_ISO_HDLC);
-        let mut digest = crc.digest();
-        digest.update(&chunk_type.bytes());
-        digest.update(&data);
-
-        Chunk { chunk_type, data, crc: digest.finalize() }
+        Chunk { chunk_type, data }
     }
     fn length(&self) -> u32 {
         self.data.len() as u32
@@ -41,7 +35,10 @@ impl Chunk {
         todo!()
     }
     fn crc(&self) -> u32 {
-        self.crc
+        let bytes: Vec<u8> = self.chunk_type.bytes().iter().cloned().chain(self.data.iter().cloned()).collect();
+        let crc = crc::Crc::<u32>::new(&crc::CRC_32_ISO_HDLC);
+        let checksum = crc.checksum(&bytes);
+        checksum
     }
     fn data_as_string(&self) -> Result<String> {
         todo!()

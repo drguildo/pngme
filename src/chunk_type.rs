@@ -10,7 +10,7 @@ impl TryFrom<[u8; 4]> for ChunkType {
 
     fn try_from(bytes: [u8; 4]) -> Result<Self> {
         if bytes.iter().any(|b| !b.is_ascii_alphabetic()) {
-            return Err(Box::new(ChunkTypeError("invalid byte array".to_string())));
+            return Err(Box::new(ChunkTypeError::InvalidByteArray));
         }
 
         return Ok(ChunkType(bytes));
@@ -22,7 +22,7 @@ impl FromStr for ChunkType {
 
     fn from_str(s: &str) -> Result<Self> {
         if s.len() != 4 {
-            return Err(Box::new(ChunkTypeError("invalid string".to_string())));
+            return Err(Box::new(ChunkTypeError::InvalidString));
         }
 
         let bytes = s.as_bytes();
@@ -62,11 +62,17 @@ impl ChunkType {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-struct ChunkTypeError(String);
+enum ChunkTypeError {
+    InvalidByteArray,
+    InvalidString,
+}
 impl std::error::Error for ChunkTypeError {}
 impl Display for ChunkTypeError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        std::fmt::Display::fmt(&self.0, f)
+        match self {
+            ChunkTypeError::InvalidByteArray => write!(f, "Invalid byte array"),
+            ChunkTypeError::InvalidString => write!(f, "Invalid string"),
+        }
     }
 }
 

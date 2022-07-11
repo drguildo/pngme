@@ -2,15 +2,6 @@ use std::{fmt::Display, str::FromStr};
 
 use crate::{Error, Result};
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-struct ChunkTypeError(String);
-impl std::error::Error for ChunkTypeError {}
-impl Display for ChunkTypeError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        std::fmt::Display::fmt(&self.0, f)
-    }
-}
-
 #[derive(Debug, PartialEq, Eq)]
 pub struct ChunkType([u8; 4]);
 
@@ -67,6 +58,15 @@ impl ChunkType {
     }
     pub fn is_safe_to_copy(&self) -> bool {
         self.0[3].is_ascii_lowercase()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct ChunkTypeError(String);
+impl std::error::Error for ChunkTypeError {}
+impl Display for ChunkTypeError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        std::fmt::Display::fmt(&self.0, f)
     }
 }
 

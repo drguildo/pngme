@@ -48,7 +48,7 @@ impl Chunk {
         self.data.len() as u32
     }
     fn chunk_type(&self) -> &ChunkType {
-        todo!()
+        &self.chunk_type
     }
     fn data(&self) -> &[u8] {
         todo!()

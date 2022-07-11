@@ -32,10 +32,10 @@ impl TryFrom<&[u8]> for Chunk {
 
         let (data, checksum_bytes) = bytes.split_at(length);
 
-        let checksum = u32::from_be_bytes(checksum_bytes.try_into()?);
+        let new_chunk = Chunk::new(chunk_type, data.to_owned());
 
-        let crc = crc::Crc::<u32>::new(&crc::CRC_32_ISO_HDLC);
-        let calculated_checksum = crc.checksum(&checksum_bytes);
+        let checksum = u32::from_be_bytes(checksum_bytes.try_into()?);
+        let calculated_checksum = new_chunk.crc();
 
         if checksum != calculated_checksum {
             return Err(Box::new(ChunkError::InvalidCrc(
@@ -44,7 +44,7 @@ impl TryFrom<&[u8]> for Chunk {
             )));
         }
 
-        Ok(Chunk::new(chunk_type, data.to_owned()))
+        Ok(new_chunk)
     }
 }
 
@@ -81,8 +81,7 @@ impl Chunk {
             .cloned()
             .chain(self.data.iter().cloned())
             .collect();
-        let crc = crc::Crc::<u32>::new(&crc::CRC_32_ISO_HDLC);
-        let checksum = crc.checksum(&bytes);
+        let checksum = crc::crc32::checksum_ieee(&bytes);
         checksum
     }
     fn data_as_string(&self) -> Result<String> {

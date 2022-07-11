@@ -69,7 +69,7 @@ impl Chunk {
         todo!()
     }
     fn as_bytes(&self) -> Vec<u8> {
-        todo!()
+        self.data.clone()
     }
 }
 

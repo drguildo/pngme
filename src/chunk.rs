@@ -14,15 +14,35 @@ impl TryFrom<&[u8]> for Chunk {
         let (data_length, bytes) = bytes.split_at(4);
         let length = u32::from_be_bytes(data_length.try_into()?) as usize;
 
-        // TODO: Check chunk type is valid
+        // Input size minus the length and CRC values
+        let expected_length = bytes.len() - 8;
+        if length != expected_length {
+            return Err(Box::new(ChunkError::InputTooSmall(expected_length, length)));
+        }
+
         let (chunk_type_bytes, bytes) = bytes.split_at(4);
         let chunk_type_bytes: [u8; 4] = chunk_type_bytes.try_into()?;
         let chunk_type = ChunkType::try_from(chunk_type_bytes)?;
 
+        if !chunk_type.is_valid() {
+            return Err(Box::new(ChunkError::InvalidChunkType(
+                chunk_type.to_string(),
+            )));
+        }
+
         let (data, checksum_bytes) = bytes.split_at(length);
 
-        // TODO: Check checksum is valid
         let checksum = u32::from_be_bytes(checksum_bytes.try_into()?);
+
+        let crc = crc::Crc::<u32>::new(&crc::CRC_32_ISO_HDLC);
+        let calculated_checksum = crc.checksum(&checksum_bytes);
+
+        if checksum != calculated_checksum {
+            return Err(Box::new(ChunkError::InvalidCrc(
+                calculated_checksum,
+                checksum,
+            )));
+        }
 
         Ok(Chunk::new(chunk_type, data.to_owned()))
     }
@@ -71,6 +91,29 @@ impl Chunk {
     }
     fn as_bytes(&self) -> Vec<u8> {
         self.data.clone()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+enum ChunkError {
+    InputTooSmall(usize, usize),
+    InvalidCrc(u32, u32),
+    InvalidChunkType(String),
+}
+impl std::error::Error for ChunkError {}
+impl Display for ChunkError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ChunkError::InputTooSmall(expected, actual) => {
+                write!(f, "Input size {} too small, expected {}", actual, expected)
+            }
+            ChunkError::InvalidCrc(expected, actual) => {
+                write!(f, "Invalid CRC {}, expected {}", actual, expected)
+            }
+            ChunkError::InvalidChunkType(chunk_type) => {
+                write!(f, "Invalid chunk type {}", chunk_type)
+            }
+        }
     }
 }
 

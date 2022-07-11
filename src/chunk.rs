@@ -51,7 +51,7 @@ impl Chunk {
         &self.chunk_type
     }
     fn data(&self) -> &[u8] {
-        todo!()
+        &self.data
     }
     fn crc(&self) -> u32 {
         let bytes: Vec<u8> = self

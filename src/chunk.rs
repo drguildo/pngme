@@ -66,7 +66,8 @@ impl Chunk {
         checksum
     }
     fn data_as_string(&self) -> Result<String> {
-        todo!()
+        let s = std::str::from_utf8(&self.data)?;
+        Ok(String::from(s))
     }
     fn as_bytes(&self) -> Vec<u8> {
         self.data.clone()

@@ -2,7 +2,7 @@ use std::fmt::Display;
 
 use crate::{Error, Result, chunk::Chunk};
 
-struct Png {
+pub struct Png {
     chunks: Vec<Chunk>,
 }
 
@@ -36,7 +36,7 @@ impl Png {
         todo!()
     }
     fn chunks(&self) -> &[Chunk] {
-        todo!()
+        &self.chunks
     }
     fn chunk_by_type(&self, chunk_type: &str) -> Option<&Chunk> {
         todo!()

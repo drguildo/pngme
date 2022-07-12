@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use crate::{Error, Result, chunk::Chunk};
+use crate::{chunk::Chunk, Error, Result};
 
 pub struct Png {
     chunks: Vec<Chunk>,
@@ -48,7 +48,7 @@ impl Png {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum PngError {
-    InvalidFileSignature
+    InvalidFileSignature,
 }
 impl std::error::Error for PngError {}
 impl Display for PngError {

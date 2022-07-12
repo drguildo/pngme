@@ -46,6 +46,19 @@ impl Png {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+enum PngError {
+    InvalidFileSignature
+}
+impl std::error::Error for PngError {}
+impl Display for PngError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            PngError::InvalidFileSignature => write!(f, "Invalid PNG file signature"),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

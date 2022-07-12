@@ -2,7 +2,9 @@ use std::fmt::Display;
 
 use crate::{Error, Result, chunk::Chunk};
 
-struct Png {}
+struct Png {
+    chunks: Vec<Chunk>,
+}
 
 impl TryFrom<&[u8]> for Png {
     type Error = Error;

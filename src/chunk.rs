@@ -11,16 +11,16 @@ impl TryFrom<&[u8]> for Chunk {
     type Error = Error;
 
     fn try_from(bytes: &[u8]) -> Result<Self> {
-        let (data_length, bytes) = bytes.split_at(4);
+        let (data_length, bytes) = bytes.split_at(Chunk::LENGTH_SIZE);
         let length = u32::from_be_bytes(data_length.try_into()?) as usize;
 
         // Input size minus the length and CRC values
-        let expected_length = bytes.len() - 8;
+        let expected_length = bytes.len() - (Chunk::LENGTH_SIZE + Chunk::CRC_SIZE);
         if length != expected_length {
             return Err(Box::new(ChunkError::InputTooSmall(expected_length, length)));
         }
 
-        let (chunk_type_bytes, bytes) = bytes.split_at(4);
+        let (chunk_type_bytes, bytes) = bytes.split_at(Chunk::CHUNK_TYPE_SIZE);
         let chunk_type_bytes: [u8; 4] = chunk_type_bytes.try_into()?;
         let chunk_type = ChunkType::try_from(chunk_type_bytes)?;
 
@@ -61,6 +61,10 @@ impl Display for Chunk {
 }
 
 impl Chunk {
+    const CHUNK_TYPE_SIZE: usize = 4;
+    const LENGTH_SIZE: usize = 4;
+    const CRC_SIZE: usize = 4;
+
     pub fn new(chunk_type: ChunkType, data: Vec<u8>) -> Chunk {
         Chunk { chunk_type, data }
     }

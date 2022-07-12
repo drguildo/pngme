@@ -61,19 +61,19 @@ impl Display for Chunk {
 }
 
 impl Chunk {
-    fn new(chunk_type: ChunkType, data: Vec<u8>) -> Chunk {
+    pub fn new(chunk_type: ChunkType, data: Vec<u8>) -> Chunk {
         Chunk { chunk_type, data }
     }
-    fn length(&self) -> u32 {
+    pub fn length(&self) -> u32 {
         self.data.len() as u32
     }
-    fn chunk_type(&self) -> &ChunkType {
+    pub fn chunk_type(&self) -> &ChunkType {
         &self.chunk_type
     }
-    fn data(&self) -> &[u8] {
+    pub fn data(&self) -> &[u8] {
         &self.data
     }
-    fn crc(&self) -> u32 {
+    pub fn crc(&self) -> u32 {
         let bytes: Vec<u8> = self
             .chunk_type
             .bytes()
@@ -84,11 +84,11 @@ impl Chunk {
         let checksum = crc::crc32::checksum_ieee(&bytes);
         checksum
     }
-    fn data_as_string(&self) -> Result<String> {
+    pub fn data_as_string(&self) -> Result<String> {
         let s = std::str::from_utf8(&self.data)?;
         Ok(String::from(s))
     }
-    fn as_bytes(&self) -> Vec<u8> {
+    pub fn as_bytes(&self) -> Vec<u8> {
         self.data.clone()
     }
 }

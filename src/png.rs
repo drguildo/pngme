@@ -24,7 +24,7 @@ impl Png {
     const STANDARD_HEADER: [u8; 8] = [137, 80, 78, 71, 13, 10, 26, 10];
 
     fn from_chunks(chunks: Vec<Chunk>) -> Png {
-        todo!()
+        Png { chunks }
     }
     fn append_chunk(&mut self, chunk: Chunk) {
         todo!()

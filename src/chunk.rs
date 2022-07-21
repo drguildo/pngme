@@ -68,8 +68,8 @@ impl Chunk {
     pub fn new(chunk_type: ChunkType, data: Vec<u8>) -> Chunk {
         Chunk { chunk_type, data }
     }
-    pub fn length(&self) -> u32 {
-        self.data.len() as u32
+    pub fn length(&self) -> usize {
+        self.data.len()
     }
     pub fn chunk_type(&self) -> &ChunkType {
         &self.chunk_type

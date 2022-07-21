@@ -11,13 +11,12 @@ impl TryFrom<&[u8]> for Chunk {
     type Error = Error;
 
     fn try_from(bytes: &[u8]) -> Result<Self> {
-        let (data_length, bytes) = bytes.split_at(Chunk::LENGTH_SIZE);
-        let length = u32::from_be_bytes(data_length.try_into()?) as usize;
+        let (chunk_data_length_bytes, bytes) = bytes.split_at(Chunk::LENGTH_SIZE);
+        let chunk_data_length = u32::from_be_bytes(chunk_data_length_bytes.try_into()?) as usize;
 
-        // Input size minus the length and CRC values
-        let expected_length = bytes.len() - (Chunk::LENGTH_SIZE + Chunk::CRC_SIZE);
-        if length != expected_length {
-            return Err(Box::new(ChunkError::InputTooSmall(expected_length, length)));
+        // Check whether the input slice can provide as many bytes as we need.
+        if (chunk_data_length + (Chunk::METADATA_SIZE - Chunk::LENGTH_SIZE)) > bytes.len() {
+            return Err(Box::new(ChunkError::InputTooSmall(chunk_data_length, bytes.len())));
         }
 
         let (chunk_type_bytes, bytes) = bytes.split_at(Chunk::CHUNK_TYPE_SIZE);
@@ -30,7 +29,7 @@ impl TryFrom<&[u8]> for Chunk {
             )));
         }
 
-        let (data, checksum_bytes) = bytes.split_at(length);
+        let (data, checksum_bytes) = bytes.split_at(chunk_data_length);
 
         let new_chunk = Chunk::new(chunk_type, data.to_owned());
 
@@ -108,8 +107,8 @@ impl std::error::Error for ChunkError {}
 impl Display for ChunkError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            ChunkError::InputTooSmall(expected, actual) => {
-                write!(f, "Input size {} too small, expected {}", actual, expected)
+            ChunkError::InputTooSmall(required, available) => {
+                write!(f, "Input size {} too small, expected {}", available, required)
             }
             ChunkError::InvalidCrc(expected, actual) => {
                 write!(f, "Invalid CRC {}, expected {}", actual, expected)

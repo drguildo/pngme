@@ -64,6 +64,7 @@ impl Chunk {
     pub const CHUNK_TYPE_SIZE: usize = 4;
     pub const LENGTH_SIZE: usize = 4;
     pub const CRC_SIZE: usize = 4;
+    pub const METADATA_SIZE: usize = Chunk::CHUNK_TYPE_SIZE + Chunk::LENGTH_SIZE + Chunk::CRC_SIZE;
 
     pub fn new(chunk_type: ChunkType, data: Vec<u8>) -> Chunk {
         Chunk { chunk_type, data }

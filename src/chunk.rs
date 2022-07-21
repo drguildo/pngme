@@ -61,9 +61,9 @@ impl Display for Chunk {
 }
 
 impl Chunk {
-    const CHUNK_TYPE_SIZE: usize = 4;
-    const LENGTH_SIZE: usize = 4;
-    const CRC_SIZE: usize = 4;
+    pub const CHUNK_TYPE_SIZE: usize = 4;
+    pub const LENGTH_SIZE: usize = 4;
+    pub const CRC_SIZE: usize = 4;
 
     pub fn new(chunk_type: ChunkType, data: Vec<u8>) -> Chunk {
         Chunk { chunk_type, data }

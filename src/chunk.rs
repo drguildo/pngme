@@ -16,7 +16,10 @@ impl TryFrom<&[u8]> for Chunk {
 
         // Check whether the input slice can provide as many bytes as we need.
         if (chunk_data_length + (Chunk::METADATA_SIZE - Chunk::LENGTH_SIZE)) > bytes.len() {
-            return Err(Box::new(ChunkError::InputTooSmall(chunk_data_length, bytes.len())));
+            return Err(Box::new(ChunkError::InputTooSmall(
+                chunk_data_length,
+                bytes.len(),
+            )));
         }
 
         let (chunk_type_bytes, bytes) = bytes.split_at(Chunk::CHUNK_TYPE_SIZE);
@@ -117,7 +120,11 @@ impl Display for ChunkError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             ChunkError::InputTooSmall(required, available) => {
-                write!(f, "Input size {} too small, expected {}", available, required)
+                write!(
+                    f,
+                    "Input size {} too small, expected {}",
+                    available, required
+                )
             }
             ChunkError::InvalidCrc(expected, actual) => {
                 write!(f, "Invalid CRC {}, expected {}", actual, expected)

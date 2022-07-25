@@ -32,9 +32,10 @@ impl TryFrom<&[u8]> for Chunk {
             )));
         }
 
-        let (data, checksum_bytes) = bytes.split_at(chunk_data_length);
+        let (chunk_data, bytes) = bytes.split_at(chunk_data_length);
+        let (checksum_bytes, bytes) = bytes.split_at(Chunk::CRC_SIZE);
 
-        let new_chunk = Chunk::new(chunk_type, data.to_owned());
+        let new_chunk = Chunk::new(chunk_type, chunk_data.to_owned());
 
         let checksum = u32::from_be_bytes(checksum_bytes.try_into()?);
         let calculated_checksum = new_chunk.crc();

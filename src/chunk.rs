@@ -93,7 +93,16 @@ impl Chunk {
         Ok(String::from(s))
     }
     pub fn as_bytes(&self) -> Vec<u8> {
-        self.data.clone()
+        let length_bytes = u32::to_be_bytes(self.data().len() as u32);
+        let type_bytes = self.chunk_type().bytes();
+        let crc_bytes = u32::to_be_bytes(self.crc());
+        length_bytes
+            .iter()
+            .chain(type_bytes.iter())
+            .chain(self.data().iter())
+            .chain(crc_bytes.iter())
+            .copied()
+            .collect::<Vec<u8>>()
     }
 }
 

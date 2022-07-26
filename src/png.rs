@@ -10,7 +10,23 @@ impl TryFrom<&[u8]> for Png {
     type Error = Error;
 
     fn try_from(bytes: &[u8]) -> Result<Self> {
-        todo!()
+        let signature_bytes = &bytes[..Png::STANDARD_HEADER.len()];
+
+        if Png::STANDARD_HEADER != signature_bytes {
+            return Err(Box::from(PngError::InvalidFileSignature));
+        }
+
+        let mut idx = Png::STANDARD_HEADER.len();
+        let mut chunks = Vec::new();
+
+        while idx < bytes.len() {
+            let chunk_bytes = &bytes[idx..];
+            let chunk = Chunk::try_from(chunk_bytes)?;
+            idx += chunk.length() + Chunk::METADATA_SIZE;
+            chunks.push(chunk);
+        }
+
+        Ok(Png { chunks })
     }
 }
 

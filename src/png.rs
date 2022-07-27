@@ -1,6 +1,6 @@
-use std::fmt::Display;
+use std::{fmt::Display, str::FromStr};
 
-use crate::{chunk::Chunk, Error, Result};
+use crate::{chunk::Chunk, chunk_type::ChunkType, Error, Result};
 
 pub struct Png {
     chunks: Vec<Chunk>,
@@ -55,7 +55,8 @@ impl Png {
         &self.chunks
     }
     fn chunk_by_type(&self, chunk_type: &str) -> Option<&Chunk> {
-        todo!()
+        let chunk_type = ChunkType::from_str(chunk_type).ok()?;
+        self.chunks.iter().find(|c| *c.chunk_type() == chunk_type)
     }
     fn as_bytes(&self) -> Vec<u8> {
         todo!()

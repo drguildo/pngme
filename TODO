@@ -1,3 +1,2 @@
- - Write test for Chunk::as_bytes()
  - Write test for passing in more data than needed to Chunk::try_from()
  - Write test of Chunk::try_from() CRC validation

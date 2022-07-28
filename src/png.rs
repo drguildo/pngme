@@ -49,7 +49,7 @@ impl Png {
         todo!()
     }
     fn header(&self) -> &[u8; 8] {
-        todo!()
+        &Png::STANDARD_HEADER
     }
     fn chunks(&self) -> &[Chunk] {
         &self.chunks

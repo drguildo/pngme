@@ -46,7 +46,13 @@ impl Png {
         self.chunks.push(chunk);
     }
     fn remove_chunk(&mut self, chunk_type: &str) -> Result<Chunk> {
-        todo!()
+        let index = self
+            .chunks
+            .iter()
+            .position(|c| (*c).chunk_type().to_string() == chunk_type)
+            .ok_or(PngError::ChunkNotFound)?;
+        let chunk = self.chunks.remove(index);
+        Ok(chunk)
     }
     fn header(&self) -> &[u8; 8] {
         &Png::STANDARD_HEADER
@@ -65,12 +71,14 @@ impl Png {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum PngError {
+    ChunkNotFound,
     InvalidFileSignature,
 }
 impl std::error::Error for PngError {}
 impl Display for PngError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
+            PngError::ChunkNotFound => write!(f, "Chunk not found"),
             PngError::InvalidFileSignature => write!(f, "Invalid PNG file signature"),
         }
     }

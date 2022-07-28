@@ -43,7 +43,7 @@ impl Png {
         Png { chunks }
     }
     fn append_chunk(&mut self, chunk: Chunk) {
-        todo!()
+        self.chunks.push(chunk);
     }
     fn remove_chunk(&mut self, chunk_type: &str) -> Result<Chunk> {
         todo!()

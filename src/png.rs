@@ -70,7 +70,11 @@ impl Png {
         self.chunks.iter().find(|c| *c.chunk_type() == chunk_type)
     }
     fn as_bytes(&self) -> Vec<u8> {
-        todo!()
+        let mut bytes = Png::STANDARD_HEADER.to_vec();
+        for chunk in &self.chunks {
+            bytes.append(&mut chunk.as_bytes());
+        }
+        bytes
     }
 }
 

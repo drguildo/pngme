@@ -33,7 +33,7 @@ impl TryFrom<&[u8]> for Chunk {
         }
 
         let (chunk_data, bytes) = bytes.split_at(chunk_data_length);
-        let (checksum_bytes, bytes) = bytes.split_at(Chunk::CRC_SIZE);
+        let (checksum_bytes, _) = bytes.split_at(Chunk::CRC_SIZE);
 
         let new_chunk = Chunk::new(chunk_type, chunk_data.to_owned());
 
@@ -89,8 +89,7 @@ impl Chunk {
             .cloned()
             .chain(self.data.iter().cloned())
             .collect();
-        let checksum = crc::crc32::checksum_ieee(&bytes);
-        checksum
+            crc::crc32::checksum_ieee(&bytes)
     }
     pub fn data_as_string(&self) -> Result<String> {
         let s = std::str::from_utf8(&self.data)?;

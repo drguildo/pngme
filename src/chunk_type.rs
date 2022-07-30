@@ -13,7 +13,7 @@ impl TryFrom<[u8; 4]> for ChunkType {
             return Err(Box::new(ChunkTypeError::InvalidByteArray));
         }
 
-        return Ok(ChunkType(bytes));
+        Ok(ChunkType(bytes))
     }
 }
 
@@ -27,9 +27,7 @@ impl FromStr for ChunkType {
 
         let bytes = s.as_bytes();
         let mut chunk_type: [u8; 4] = [0; 4];
-        for i in 0..4 {
-            chunk_type[i] = bytes[i];
-        }
+        chunk_type[..4].copy_from_slice(&bytes[..4]);
         ChunkType::try_from(chunk_type)
     }
 }

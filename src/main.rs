@@ -7,6 +7,57 @@ mod png;
 pub type Error = Box<dyn std::error::Error>;
 pub type Result<T> = std::result::Result<T, Error>;
 
-fn main() -> Result<()> {
-    todo!()
+use std::path::PathBuf;
+
+use clap::{Parser, Subcommand};
+
+#[derive(Parser)]
+#[clap(author, version, about, long_about = None)]
+#[clap(propagate_version = true)]
+struct Cli {
+    #[clap(subcommand)]
+    command: Commands,
+}
+
+#[derive(Subcommand)]
+enum Commands {
+    Encode {
+        file_path: PathBuf,
+        chunk_type: String,
+        message: String,
+        output_file: Option<PathBuf>,
+    },
+    Decode {
+        file_path: PathBuf,
+        chunk_type: String,
+    },
+    Remove {
+        file_path: PathBuf,
+        chunk_type: String,
+    },
+    Print {
+        file_path: PathBuf,
+    },
+}
+
+fn main() {
+    let cli = Cli::parse();
+
+    match &cli.command {
+        Commands::Encode {
+            file_path,
+            chunk_type,
+            message,
+            output_file,
+        } => todo!(),
+        Commands::Decode {
+            file_path,
+            chunk_type,
+        } => todo!(),
+        Commands::Remove {
+            file_path,
+            chunk_type,
+        } => todo!(),
+        Commands::Print { file_path } => todo!(),
+    }
 }

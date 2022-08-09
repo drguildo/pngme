@@ -7,9 +7,14 @@ mod png;
 pub type Error = Box<dyn std::error::Error>;
 pub type Result<T> = std::result::Result<T, Error>;
 
-use std::path::PathBuf;
+use std::{
+    fs::File,
+    io::{BufReader, Read},
+    path::{Path, PathBuf},
+};
 
 use clap::{Parser, Subcommand};
+use png::Png;
 
 #[derive(Parser)]
 #[clap(author, version, about, long_about = None)]
@@ -58,6 +63,21 @@ fn main() {
             file_path,
             chunk_type,
         } => todo!(),
-        Commands::Print { file_path } => todo!(),
+        Commands::Print { file_path } => {
+            let bytes = read_file(file_path);
+            let png = Png::try_from(&bytes[..]).expect("Failed to read PNG");
+            println!("{}", png);
+        }
     }
+}
+
+fn read_file(file_path: &Path) -> Vec<u8> {
+    let f = File::open(file_path).expect("Failed to open file");
+    let mut reader = BufReader::new(f);
+    let mut buffer = Vec::new();
+
+    // Read file into vector.
+    reader.read_to_end(&mut buffer).expect("Failed to read PNG data");
+
+    buffer
 }

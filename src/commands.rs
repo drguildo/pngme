@@ -3,6 +3,18 @@ use std::path::Path;
 
 use crate::png::Png;
 
+pub fn encode(file_path: &Path, chunk_type: &str, message: &str, output_file: Option<&Path>) {
+    todo!()
+}
+
+pub fn decode(file_path: &Path, chunk_type: &str) {
+    todo!()
+}
+
+pub fn remove(file_path: &Path, chunk_type: &str) {
+    todo!()
+}
+
 pub fn print(file_path: &Path) {
     let bytes = read_file(file_path);
     let png = Png::try_from(&bytes[..]).expect("Failed to read PNG");

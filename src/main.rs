@@ -25,7 +25,7 @@ enum Commands {
         file_path: PathBuf,
         chunk_type: String,
         message: String,
-        output_file: Option<PathBuf>,
+        output_path: Option<PathBuf>,
     },
     Decode {
         file_path: PathBuf,
@@ -48,8 +48,10 @@ fn main() {
             file_path,
             chunk_type,
             message,
-            output_file,
-        } => todo!(),
+            output_path,
+        } => {
+            commands::encode(file_path, chunk_type, message, output_path);
+        }
         Commands::Decode {
             file_path,
             chunk_type,

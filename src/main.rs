@@ -55,7 +55,9 @@ fn main() {
         Commands::Decode {
             file_path,
             chunk_type,
-        } => todo!(),
+        } => {
+            commands::decode(file_path, chunk_type);
+        },
         Commands::Remove {
             file_path,
             chunk_type,

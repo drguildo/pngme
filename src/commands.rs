@@ -31,7 +31,10 @@ pub fn encode(file_path: &Path, chunk_type: &str, message: &str, output_path: &O
 }
 
 pub fn decode(file_path: &Path, chunk_type: &str) {
-    todo!()
+    let png = read_png(file_path);
+    let chunk = png.chunk_by_type(chunk_type).expect("Failed to find chunk");
+    let decoded_chunk = chunk.data_as_string().expect("Failed to decode chunk");
+    println!("{}", decoded_chunk);
 }
 
 pub fn remove(file_path: &Path, chunk_type: &str) {

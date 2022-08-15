@@ -29,7 +29,9 @@ pub fn decode(file_path: &Path, chunk_type: &str) {
 }
 
 pub fn remove(file_path: &Path, chunk_type: &str) {
-    todo!()
+    let mut png = read_png(file_path);
+    png.remove_chunk(chunk_type).expect("Failed to remove chunk");
+    write_png(file_path, &png);
 }
 
 pub fn print(file_path: &Path) {

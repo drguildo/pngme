@@ -61,7 +61,9 @@ fn main() {
         Commands::Remove {
             file_path,
             chunk_type,
-        } => todo!(),
+        } => {
+            commands::remove(file_path, chunk_type);
+        },
         Commands::Print { file_path } => {
             commands::print(file_path);
         }

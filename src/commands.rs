@@ -18,16 +18,7 @@ pub fn encode(file_path: &Path, chunk_type: &str, message: &str, output_path: &O
         None => file_path.to_owned(),
     };
 
-    let mut output_file = OpenOptions::new()
-        .write(true)
-        .create(true)
-        .truncate(true)
-        .open(output_path)
-        .expect("Failed to open output file");
-
-    output_file
-        .write(png.as_bytes().as_slice())
-        .expect("Failed to write output file");
+    write_png(&output_path, &png);
 }
 
 pub fn decode(file_path: &Path, chunk_type: &str) {
@@ -58,4 +49,17 @@ fn read_png(file_path: &Path) -> Png {
     let png = Png::try_from(&bytes[..]).expect("Failed to read PNG");
 
     png
+}
+
+fn write_png(output_path: &Path, png: &Png) {
+    let mut output_file = OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open(output_path)
+        .expect("Failed to open output file");
+
+    output_file
+        .write(png.as_bytes().as_slice())
+        .expect("Failed to write output file");
 }

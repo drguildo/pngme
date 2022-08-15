@@ -3,9 +3,9 @@ use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 
-use crate::chunk::Chunk;
-use crate::chunk_type::ChunkType;
-use crate::png::Png;
+use pngme::chunk::Chunk;
+use pngme::chunk_type::ChunkType;
+use pngme::png::Png;
 
 pub fn encode(file_path: &Path, chunk_type: &str, message: &str, output_path: &Option<PathBuf>) {
     let mut png = read_png(file_path);

@@ -89,7 +89,7 @@ impl Chunk {
             .cloned()
             .chain(self.data.iter().cloned())
             .collect();
-        crc::crc32::checksum_ieee(&bytes)
+        crc::Crc::<u32>::new(&crc::CRC_32_ISO_HDLC).checksum(&bytes)
     }
     pub fn data_as_string(&self) -> Result<String> {
         let s = std::str::from_utf8(&self.data)?;
